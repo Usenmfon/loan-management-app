@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
-// const routes = require("./routes");
+const routes = require("./routes");
 require("./config/database.js");
 const path = require('path')
 
@@ -9,7 +9,7 @@ var app = express();
 
 app.use(bodyParser.json());
 app.use(express.urlencoded({extended: false,}));
-// app.use("/", routes);
+app.use("/api/", routes);
 
 app.get('/', function (req, res)
 {
