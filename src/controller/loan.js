@@ -15,7 +15,6 @@ exports.getLoanController = async function (req, res) {
 
 exports.createLoanController = async function (req, res) {
   const data = req.body
-  console.log(req.body)  //handle validation
   return createLoanService(data)
     .then((loan) => {
       return res.json(loan);

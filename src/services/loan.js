@@ -10,7 +10,6 @@ exports.createLoanService = async function (data, createdDate) {
   }
 
   let durationInDays = loanObject.dueDate -  new Date();
-  console.log(loanObject.dueDate,data)
   durationInDays = Math.abs(Math.floor(durationInDays / (1000 * 60 * 60 * 24)));
   loanObject.duration = durationInDays;
 

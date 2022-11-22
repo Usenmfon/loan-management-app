@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>item App</title>
+    <title>Loan Management App</title>
 </head>
 <style>
     form{
-        border: solid black;
+        border: solid gray;
         height: 200px;
         display: flex;
         flex-direction: column;
@@ -19,7 +19,8 @@
         width: fit-content;
     }
     table, thead, td{
-        border: 1px solid
+        border: 1px solid;
+        border-collapse: collapse;
     }
     section{
         margin-bottom: 20px;
@@ -28,14 +29,14 @@
 <body>
     <section>
         <form action="" method="post">
-            <header>Add Client</header>
+            <header>Add New Client</header>
             <label for="firstname">
                 First Name:
-                <input type="text" name="firstname" id="firstname" placeholder="enter client name" required/>
+                <input type="text" name="firstname" id="firstname" placeholder="enter first name" required/>
             </label>
             <label for="lastname">
                 Last Name:
-                <input type="text" name="lastname" id="lastname" placeholder="enter client name" required/>
+                <input type="text" name="lastname" id="lastname" placeholder="enter last name" required/>
             </label>
             <label for="principal">
                 Principal:
@@ -57,13 +58,14 @@
     <script>
         let thead = document.getElementsByTagName('thead')[0];
         let tbody = document.getElementsByTagName('tbody')[0];
-        const tableHeaders = ["Name", "Principal Amount", "Payable Amount", "Daily Amount", "item Duration(months)"];
+        let select = document.getElementsByTagName('select')[0];
+        const tableHeaders = ["Name", "Principal Amount", "Payable Amount", "Daily Amount", "Loan Duration(months)", "Penalty Interest"];
 
         fetch(`${window.location.origin}/api/loan`,
         {method: "GET"})
         .then(response => response.json())
         .then(data => {
-            console.log(data);
+            console.log(data)
             displayData(data);
         })
         .catch(error => console.log(error))
@@ -76,11 +78,10 @@
             const data = Object.fromEntries(formData.entries());
             
             submitData(form.method, data)
-            <!-- console.log(window.location.origin) -->
         })
 
        function submitData(methodName, data){
-            fetch(`${window.location.origin}/api/item`,
+            fetch(`${window.location.origin}/api/loan`,
             {
                 method: methodName,
                 body: JSON.stringify(data),
@@ -121,6 +122,7 @@
                 let payable = document.createElement('td');
                 let daily = document.createElement('td');
                 let duration = document.createElement('td');
+                let penalty = document.createElement('td');
 
                 const timeDifference = new Date(item.dueDate) - new Date();
                 const dayDifference = Math.abs(
@@ -128,6 +130,8 @@
                 );
                 let interest = item.principal * (0.08 / dayDifference) * (dayDifference / 365);
                 item.payable = item.principal + interest * dayDifference;
+                let penaltyInterest = item.payable * 0.08 * dayDifference;
+                let penaltyAmount = item.payable + interest + (item.principal * Math.floor(dayDifference/15)* 0.2);
                 item.daily = item.payable / dayDifference;
     
                 firstname.textContent = item.user?.firstname || item.firstname;
@@ -135,8 +139,9 @@
                 payable.textContent = item.payable.toFixed(2);
                 daily.textContent = item.daily.toFixed(2);
                 duration.textContent = item.duration;
+                penalty.textContent = penaltyAmount.toFixed(2);
     
-                tr.append(firstname, principal, payable, daily, duration)
+                tr.append(firstname, principal, payable, daily, duration, penalty)
                 tbody.appendChild(tr);
             })
         }
