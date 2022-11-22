@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan App</title>
+</head>
+<style>
+    form{
+        border: solid black;
+        height: 200px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        width: fit-content;
+    }
+    button{
+        width: fit-content;
+    }
+    table, thead, td{
+        border: 1px solid
+    }
+    section{
+        margin-bottom: 20px;
+    }
+</style>
+<body>
+    <section>
+        <form action="" method="post">
+            <header>Add Client</header>
+            <label for="name">
+                Name:
+                <input type="text" name="name" id="name" placeholder="enter client name" required/>
+            </label>
+            <label for="principal">
+                Principal:
+                <input type="text" name="principal" id="principal" placeholder="enter principal" required/>
+            </label>
+            <label for="date">
+                Date:
+                <input type="date" name="date" id="date" />
+            </label>
+            <button type="submit">submit</button>
+        </form>
+    </section>
+    <section>
+        <table>
+            <thead></thead>
+            <tbody></tbody>
+        </table>
+    </section>
+    <script>
+        let thead = document.getElementsByTagName('thead')[0];
+        let tbody = document.getElementsByTagName('tbody')[0];
+        const tableHeaders = ["Name", "Principal Amount", "Payable Amount", "Daily Amount", "Loan Duration(months)"];
+
+        fetch(`${window.Location.origin}/data`,
+        {method: "GET"})
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            displayData(data);
+        })
+        .catch(error => console.log(error))
+
+        document.forms[0].addEventListener("submit", function(event){
+            event.preventDefault();
+
+            const form = event.currentTarget;
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            
+            submitData(form.method, data)
+            console.log(window.location.origin)
+        })
+
+       function submitData(methodName, data){
+            fetch(`${window.Location.origin}/add`,
+            {
+                method: methodName,
+                body: JSON.stringify(data),
+                headers: {"Content-Type": "application/json; utf-8"}
+            }).then(response => response.json())
+       }
+
+        const dummy = [
+            {
+                name: "Usenmfon",
+                principal: 5000,
+                payable: 5020,
+                daily: 15,
+                duration: 120,
+            },
+            {
+                name: "Daniel",
+                principal: 2000,
+                payable: 2050,
+                daily: 5,
+                duration: 20,
+            },
+        ];
+
+        tableHeaders.map((item) => {
+            let td = document.createElement('td');
+            td.textContent = item;
+            thead.appendChild(td)
+        });
+        displayData(dummy)
+        function displayData(dummy){
+            dummy.map((item, index) => {
+                let tr = document.createElement('tr');
+                let name = document.createElement('td');
+                let principal= document.createElement('td');
+                let payable = document.createElement('td');
+                let daily = document.createElement('td');
+                let duration = document.createElement('td');
+    
+                name.textContent = item.name;
+                principal.textContent = item.principal;
+                payable.textContent = item.payable;
+                daily.textContent = item.daily;
+                duration.textContent = item.duration;
+    
+                tr.append(name, principal, payable, daily, duration)
+                tbody.appendChild(tr);
+            })
+        }
+    </script>
+</body>
+</html>

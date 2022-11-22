@@ -1,0 +1,37 @@
+{
+  "name": "loan-management-app",
+  "version": "1.0.0",
+  "description": "a loan app for financers",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Usenmfon/loan-management-app.git"
+  },
+  "keywords": [
+    "nodejs",
+    "eta",
+    "body-parser",
+    "expressjs",
+    "mongodb"
+  ],
+  "author": "Usenmfon Uko",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Usenmfon/loan-management-app/issues"
+  },
+  "homepage": "https://github.com/Usenmfon/loan-management-app#readme",
+  "dependencies": {
+    "body-parser": "^1.20.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^6.7.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
